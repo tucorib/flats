@@ -21,8 +21,8 @@ class Century21(RestSource):
     def has_next_page(self):
         return self.soup.find('li', attrs={"class": "btnSUIV_PREC suivant"}) is not None
 
-    def go_to_next_page(self):
-        self.url = '%s%s' % (
+    def get_next_url(self):
+        return '%s%s' % (
             self.domain,
             self.soup.find('li', attrs={"class": "btnSUIV_PREC suivant"}).find('a').get('href')
         )

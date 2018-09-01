@@ -22,5 +22,5 @@ class Adl(RestSource):
     def has_next_page(self):
         return self.soup.find('a', attrs={"data-page": self.page + 1}) is not None
 
-    def go_to_next_page(self):
-        self.url = self.soup.find('a', attrs={"data-page": self.page + 1}).get('href')
+    def get_next_url(self):
+        return self.soup.find('a', attrs={"data-page": self.page + 1}).get('href')

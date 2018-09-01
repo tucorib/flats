@@ -23,7 +23,7 @@ class BonCoin(RestSource):
             if _.find('span', attrs={'name': 'chevronRight'}):
                 return True
 
-    def go_to_next_page(self):
+    def get_next_url(self):
         for _ in self.soup.find_all('a', attrs={"class": "_1f-eo"}):
             if _.find('span', attrs={'name': 'chevronRight'}):
-                self.url = '%s%s' % (self.domain, _.get('href'))
+                return '%s%s' % (self.domain, _.get('href'))

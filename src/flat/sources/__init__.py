@@ -53,32 +53,37 @@ class RestSource(Source):
 
     def __init__(self, name):
         super(RestSource, self).__init__(name)
-        self.domain = get_source_options(self.name)['domain']
-        self.url = get_source_options(self.name)['url']
-
-        self.url = "%s%s" % (
-            self.domain,
-            self.url,
-        )
-        self.page = 1
+        self.domain = get_source_options(self.name).get('domain', None)
+        self.urls = [
+            "%s%s" % (
+                self.domain,
+                _)
+            for _ in get_source_options(self.name).get('urls', [])
+        ]
 
     def get_annonces(self):
         pass
 
     def parse(self):
-        self.load()
+        for url in self.urls:
+            self.page = 1
+            for _ in self.parse_url(url):
+                yield _
+
+    def parse_url(self, url):
+        self.load(url)
         for _ in self.get_annonces():
             yield _
 
         # Next page
         if self.has_next_page():
-            self.go_to_next_page()
+            next_url = self.get_next_url()
             self.page += 1
-            for _ in self.parse():
+            for _ in self.parse_url(next_url):
                 yield _
 
-    def load(self):
-        req = urllib2.Request(self.url, headers={
+    def load(self, url):
+        req = urllib2.Request(url, headers={
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.11 (KHTML, like Gecko) Chrome/23.0.1271.64 Safari/537.11',
             'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
             'Accept-Charset': 'ISO-8859-1,utf-8;q=0.7,*;q=0.3',
@@ -91,7 +96,7 @@ class RestSource(Source):
     def has_next_page(self):
         pass
 
-    def go_to_next_page(self):
+    def get_next_url(self):
         pass
 
 
@@ -104,9 +109,9 @@ class JsRestSource(RestSource):
         firefox_options = Options()
         firefox_options.add_argument("--headless")
         self.browser = webdriver.Firefox(firefox_options=firefox_options)
-        self.browser.get(self.url)
 
-    def load(self):
+    def load(self, url):
+        self.browser.get(url)
         self.soup = BeautifulSoup(self.browser.page_source, 'html.parser')
 
     def close(self):

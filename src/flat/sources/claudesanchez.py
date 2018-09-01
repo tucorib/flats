@@ -31,8 +31,7 @@ class ClaudeSanchez(RestSource):
             if _.find('img', attrs={'alt': 'page suivante'}):
                 return True
 
-    def go_to_next_page(self):
+    def get_next_url(self):
         for _ in self.soup.find_all('a', attrs={"class": "num_page"}):
             if _.find('img', attrs={'alt': 'page suivante'}):
-                self.url = '%s%s' % (self.domain, _.get('href'))
-                break
+                return '%s%s' % (self.domain, _.get('href'))
