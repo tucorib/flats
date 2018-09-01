@@ -58,7 +58,7 @@ class RestSource(Source):
             "%s%s" % (
                 self.domain,
                 _)
-            for _ in get_source_options(self.name).get('urls', [])
+            for _ in get_source_options(self.name).get('urls', [""])
         ]
 
     def get_annonces(self):
@@ -100,18 +100,55 @@ class RestSource(Source):
         pass
 
 
-class JsRestSource(RestSource):
+class JsRestSource(Source):
 
     def __init__(self, name):
         super(JsRestSource, self).__init__(name)
+        self.domain = get_source_options(self.name).get('domain', None)
+        self.urls = [
+            "%s%s" % (
+                self.domain,
+                _)
+            for _ in get_source_options(self.name).get('urls', [""])
+        ]
+
+    def get_annonces(self):
+        pass
 
     def open(self):
         firefox_options = Options()
         firefox_options.add_argument("--headless")
         self.browser = webdriver.Firefox(firefox_options=firefox_options)
 
-    def load(self, url):
+    def parse(self):
+        for url in self.urls:
+            self.init_page(url)
+            self.page = 1
+            for _ in self.parse_url():
+                yield _
+
+    def parse_url(self):
+        self.load()
+        for _ in self.get_annonces():
+            yield _
+
+        # Next page
+        if self.has_next_page():
+            self.go_to_next_page()
+            self.page += 1
+            for _ in self.parse_url():
+                yield _
+
+    def init_page(self, url):
         self.browser.get(url)
+
+    def has_next_page(self):
+        pass
+
+    def go_to_next_page(self):
+        pass
+
+    def load(self):
         self.soup = BeautifulSoup(self.browser.page_source, 'html.parser')
 
     def close(self):

@@ -24,8 +24,8 @@ class SquareHabitat(JsRestSource):
         self.budgetMax = get_source_options(self.name).get_float('budget-max', None)
         self.surfaceMin = get_source_options(self.name).get_float('surface-min', None)
 
-    def open(self):
-        super(SquareHabitat, self).open()
+    def init_page(self, url):
+        super(SquareHabitat, self).init_page(url)
         # Fill form
 
         # Type
