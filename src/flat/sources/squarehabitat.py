@@ -7,6 +7,7 @@ import re
 import urllib2
 
 from bs4 import BeautifulSoup
+from selenium.webdriver.common.keys import Keys
 
 from flat.configuration.sources import get_source_options
 from flat.sources import JsRestSource
@@ -31,17 +32,17 @@ class SquareHabitat(JsRestSource):
 
         # Type annonce
         if self.typeAnnonce:
-            self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").find_elements_by_tag_name('button')[0].click()
+            self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").find_elements_by_tag_name('button')[0].send_keys(Keys.END)
             for a in self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").find_elements_by_tag_name('a'):
                 if a.text == self.typeAnnonce:
-                    a.click()
+                    a.send_keys(Keys.END)
                     break
         # Type bien
         if self.typeBien:
-            self.browser.find_element_by_id("cphTop_lstTypeBien-mask").find_elements_by_tag_name('button')[0].click()
+            self.browser.find_element_by_id("cphTop_lstTypeBien-mask").find_elements_by_tag_name('button')[0].send_keys(Keys.END)
             for a in self.browser.find_element_by_id("cphTop_lstTypeBien-mask").find_elements_by_tag_name('a'):
                 if a.text == self.typeBien:
-                    a.click()
+                    a.send_keys(Keys.END)
                     break
         # Location
         if self.location:

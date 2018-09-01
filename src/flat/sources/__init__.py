@@ -4,7 +4,7 @@ import urllib2
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.chrome.options import Options
 
 from flat.configuration.sources import get_source_class, get_source_options
 
@@ -29,9 +29,10 @@ def build_source(source, *args, **kargs):
 
 
 def build_browser():
-    firefox_options = Options()
-    firefox_options.add_argument("--headless")
-    return webdriver.Firefox(firefox_options=firefox_options)
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument('--disable-gpu')
+    return webdriver.Chrome('/usr/lib/chromium-browser/chromedriver', chrome_options=chrome_options)
 
 
 def xpath_soup(element):
