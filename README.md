@@ -11,6 +11,8 @@ This app parse some real estates website to notify a user by e-mail when new ads
 $ pip install -r requirements.txt
 ```
 
+- Install [geckodriver](https://selenium-python.readthedocs.io/installation.html#drivers)
+
 - Setup your configured sources:
 
 ```shell
