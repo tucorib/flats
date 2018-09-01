@@ -1,3 +1,9 @@
+CREATE SEQUENCE public.source_seq
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 4
+  CACHE 1;
 CREATE TABLE public.source
 (
   id integer NOT NULL DEFAULT nextval('source_seq'::regclass),
@@ -5,11 +11,13 @@ CREATE TABLE public.source
   CONSTRAINT source_pk PRIMARY KEY (id),
   CONSTRAINT source_name_un UNIQUE (name)
 );
-CREATE SEQUENCE public.source_seq
+
+
+CREATE SEQUENCE public.flat_seq
   INCREMENT 1
   MINVALUE 1
   MAXVALUE 9223372036854775807
-  START 4
+  START 1
   CACHE 1;
 
 CREATE TABLE public.flat
@@ -25,12 +33,6 @@ CREATE TABLE public.flat
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT flat_reference_un UNIQUE (source_id, reference)
 );
-CREATE SEQUENCE public.flat_seq
-  INCREMENT 1
-  MINVALUE 1
-  MAXVALUE 9223372036854775807
-  START 1
-  CACHE 1;
 CREATE INDEX fki_flat_source_id
   ON public.flat
   USING btree
