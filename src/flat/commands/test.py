@@ -29,6 +29,8 @@ if __name__ == '__main__':
                     source,
                     reference,
                     url)
+        except Exception, e:
+            print e
         finally:
             parser.close()
     sys.exit(0)
