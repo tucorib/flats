@@ -35,8 +35,8 @@ class Foncia(RestSource):
     def has_next_page(self):
         return self.soup.find('div', attrs={"class": "Pagination Pagination--more"}).find('a', text="Suivante >") is not None
 
-    def go_to_next_page(self):
-        self.url = '%s%s' % (
+    def get_next_url(self):
+        return '%s%s' % (
             self.domain,
             self.soup.find('div', attrs={"class": "Pagination Pagination--more"}).find('a', text="Suivante >").get('href')
         )

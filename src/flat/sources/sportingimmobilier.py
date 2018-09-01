@@ -31,5 +31,5 @@ class SportingImmobilier(RestSource):
     def has_next_page(self):
         return self.soup.find('div', attrs={"class": "post-next"}).find('a') is not None
 
-    def go_to_next_page(self):
-        self.url = self.soup.find('div', attrs={"class": "post-next"}).find('a').get('href')
+    def get_next_url(self):
+        return self.soup.find('div', attrs={"class": "post-next"}).find('a').get('href')
