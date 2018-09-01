@@ -18,6 +18,8 @@ if __name__ == '__main__':
         try:
             parser.open()
             ads += register_flats(source, parser.parse())
+        except Exception, e:
+            print e
         finally:
             parser.close()
     if len(ads) > 0:
