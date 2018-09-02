@@ -16,10 +16,11 @@ REFERENCE_REGEX = r'Ref. : (.*)$'
 
 class SquareHabitat(JsRestSource):
 
-    def __init__(self, name):
-        super(SquareHabitat, self).__init__(name)
+    def __init__(self, name, *args, **kargs):
+        super(SquareHabitat, self).__init__(name, kargs['browser'])
 
-        self.type = get_source_options(self.name).get('typeAnnonce', None)
+        self.typeAnnonce = get_source_options(self.name).get('type-annonce', None)
+        self.typeBien = get_source_options(self.name).get('type-bien', None)
         self.location = get_source_options(self.name).get('location', None)
         self.budgetMax = get_source_options(self.name).get_float('budget-max', None)
         self.surfaceMin = get_source_options(self.name).get_float('surface-min', None)
@@ -28,18 +29,27 @@ class SquareHabitat(JsRestSource):
         super(SquareHabitat, self).init_page(url)
         # Fill form
 
-        # Type
-        if self.type:
+        # Type annonce
+        if self.typeAnnonce:
             self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").find_elements_by_tag_name('button')[0].click()
             for a in self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").find_elements_by_tag_name('a'):
-                if a.text == self.type:
+                if a.text == self.typeAnnonce:
+                    a.click()
+                    break
+        # Type bien
+        if self.typeBien:
+            self.browser.find_element_by_id("cphTop_lstTypeBien-mask").find_elements_by_tag_name('button')[0].click()
+            for a in self.browser.find_element_by_id("cphTop_lstTypeBien-mask").find_elements_by_tag_name('a'):
+                if a.text == self.typeBien:
                     a.click()
                     break
         # Location
         if self.location:
             self.browser.execute_script("document.getElementById('search_id').value='%s';" % self.location)
+        # Budget
         if self.budgetMax:
             self.browser.find_element_by_name("ctl00$cphTop$txtBudgetMax").send_keys(str(self.budgetMax))
+        # Surface
         if self.surfaceMin:
             self.browser.find_element_by_name("ctl00$cphTop$txtSurfaceMin").send_keys(str(self.surfaceMin))
 
