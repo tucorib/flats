@@ -25,7 +25,7 @@ def create_service():
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets(smtp.get_smtp_secret(), SCOPES)
         creds = tools.run_flow(flow, store)
-    return build('gmail', 'v1', http=creds.authorize(Http()))
+    return build('gmail', 'v1', http=creds.authorize(Http()), cache_discovery=False)
 
 
 def send_email(service, ads):
