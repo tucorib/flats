@@ -20,7 +20,7 @@ CHUNKSIZE = 50
 
 
 def create_service():
-    store = file.Storage('../conf/token.json')
+    store = file.Storage(smtp.get_smtp_token())
     creds = store.get()
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets(smtp.get_smtp_secret(), SCOPES)
