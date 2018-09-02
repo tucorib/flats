@@ -4,10 +4,16 @@ Created on 31 aout 2018
 @author: tuco
 '''
 import argparse
+import logging
+import logging.config
 import sys
 
+from flat.configuration.logging import get_logging_conf
 from flat.configuration.sources import get_sources
 from flat.sources import build_source, build_browser
+
+logging.config.fileConfig(get_logging_conf())
+logger = logging.getLogger('root')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -26,13 +32,14 @@ if __name__ == '__main__':
             parser = build_source(source, browser=browser)
             parser.open()
             for reference, url in parser.parse():
-                print '[%s] %s %s' % (
+                logger.info('[%s] %s %s' % (
                     source,
                     reference,
-                    url)
+                    url
+                ))
             parser.close()
-    except Exception, e:
-        print e
+    except Exception, error:
+        logger.error(error)
     finally:
         if browser:
             browser.close()
