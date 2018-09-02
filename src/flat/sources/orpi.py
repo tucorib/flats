@@ -9,8 +9,8 @@ from flat.sources import JsRestSource, xpath_soup
 
 class Orpi(JsRestSource):
 
-    def __init__(self, name):
-        super(Orpi, self).__init__(name)
+    def __init__(self, name, *args, **kargs):
+        super(Orpi, self).__init__(name, kargs['browser'])
 
         self.locations = get_source_options(self.name).get('locations', None)
 

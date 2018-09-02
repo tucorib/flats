@@ -9,7 +9,7 @@ from flat.sources import RestSource
 
 class SportingImmobilier(RestSource):
 
-    def __init__(self, name):
+    def __init__(self, name, *args, **kargs):
         super(SportingImmobilier, self).__init__(name)
 
         self.surfaceMin = get_source_options(self.name).get_float('surface-min', None)

@@ -8,7 +8,7 @@ from flat.sources import RestSource
 
 class Century21(RestSource):
 
-    def __init__(self, name):
+    def __init__(self, name, *args, **kargs):
         super(Century21, self).__init__(name)
 
     def get_annonces(self):

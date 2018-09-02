@@ -14,8 +14,8 @@ REFERENCE_REGEX = r'container-bien-(.*)$'
 
 class Citya(JsRestSource):
 
-    def __init__(self, name):
-        super(Citya, self).__init__(name)
+    def __init__(self, name, *args, **kargs):
+        super(Citya, self).__init__(name, kargs['browser'])
 
         self.locations = get_source_options(self.name).get('locations', None)
 

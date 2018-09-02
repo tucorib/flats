@@ -16,8 +16,8 @@ REFERENCE_REGEX = r'Ref. : (.*)$'
 
 class SquareHabitat(JsRestSource):
 
-    def __init__(self, name):
-        super(SquareHabitat, self).__init__(name)
+    def __init__(self, name, *args, **kargs):
+        super(SquareHabitat, self).__init__(name, kargs['browser'])
 
         self.type = get_source_options(self.name).get('typeAnnonce', None)
         self.location = get_source_options(self.name).get('location', None)
