@@ -14,6 +14,10 @@ def get_smtp_port():
     return config.get('smtp.port')
 
 
+def get_smtp_token():
+    return config.get('smtp.token')
+
+
 def get_smtp_secret():
     return config.get('smtp.secret')
 
