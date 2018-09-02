@@ -16,7 +16,7 @@ if __name__ == '__main__':
     try:
         for source in get_sources():
             service = create_service()
-            parser = build_source(source, browser)
+            parser = build_source(source, browser=browser)
             parser.open()
             ads += register_flats(source, parser.parse())
             parser.close()

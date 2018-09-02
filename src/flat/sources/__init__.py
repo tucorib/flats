@@ -24,8 +24,8 @@ class Source(object):
         pass
 
 
-def build_source(source, browser):
-    return locate(get_source_class(source))(source, browser)
+def build_source(source, *args, **kargs):
+    return locate(get_source_class(source))(source, *args, **kargs)
 
 
 def build_browser():

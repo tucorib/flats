@@ -23,7 +23,7 @@ if __name__ == '__main__':
     browser = build_browser()
     try:
         for source in args.sources:
-            parser = build_source(source, browser)
+            parser = build_source(source, browser=browser)
             parser.open()
             for reference, url in parser.parse():
                 print '[%s] %s %s' % (
