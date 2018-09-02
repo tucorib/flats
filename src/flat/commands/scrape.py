@@ -16,12 +16,14 @@ if __name__ == '__main__':
     browser = build_browser()
     try:
         for source in get_sources():
-            parser = build_source(source, browser=browser)
-            parser.open()
-            ads += register_flats(source, parser.parse())
-            parser.close()
-    except Exception, error:
-        logger.error(error)
+            try:
+                parser = build_source(source, browser=browser)
+                parser.open()
+                ads += register_flats(source, parser.parse())
+            except Exception, error:
+                logger.error('[%s] %s' % (source, error))
+            finally:
+                parser.close()
     finally:
         if browser:
             browser.close()
