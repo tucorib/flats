@@ -24,8 +24,14 @@ class Source(object):
         pass
 
 
-def build_source(source):
-    return locate(get_source_class(source))(source)
+def build_source(source, *args, **kargs):
+    return locate(get_source_class(source))(source, *args, **kargs)
+
+
+def build_browser():
+    firefox_options = Options()
+    firefox_options.add_argument("--headless")
+    return webdriver.Firefox(firefox_options=firefox_options)
 
 
 def xpath_soup(element):
@@ -102,8 +108,9 @@ class RestSource(Source):
 
 class JsRestSource(Source):
 
-    def __init__(self, name):
+    def __init__(self, name, browser):
         super(JsRestSource, self).__init__(name)
+        self.browser = browser
         self.domain = get_source_options(self.name).get('domain', None)
         self.urls = [
             "%s%s" % (
@@ -114,11 +121,6 @@ class JsRestSource(Source):
 
     def get_annonces(self):
         pass
-
-    def open(self):
-        firefox_options = Options()
-        firefox_options.add_argument("--headless")
-        self.browser = webdriver.Firefox(firefox_options=firefox_options)
 
     def parse(self):
         for url in self.urls:
@@ -150,6 +152,3 @@ class JsRestSource(Source):
 
     def load(self):
         self.soup = BeautifulSoup(self.browser.page_source, 'html.parser')
-
-    def close(self):
-        self.browser.close()

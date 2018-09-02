@@ -9,7 +9,7 @@ from flat.sources import RestSource
 
 class Adl(RestSource):
 
-    def __init__(self, name):
+    def __init__(self, name, *args, **kargs):
         super(Adl, self).__init__(name)
 
     def get_annonces(self):

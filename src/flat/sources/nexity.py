@@ -8,8 +8,8 @@ from flat.sources import JsRestSource, xpath_soup
 
 class Nexity(JsRestSource):
 
-    def __init__(self, name):
-        super(Nexity, self).__init__(name)
+    def __init__(self, name, *args, **kargs):
+        super(Nexity, self).__init__(name, kargs['browser'])
 
     def get_annonces(self):
         for _ in self.soup.find_all('div', attrs={'class': 'item'}):

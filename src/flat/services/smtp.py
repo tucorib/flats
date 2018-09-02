@@ -16,6 +16,7 @@ from flat.configuration import smtp
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 APPLICATION_NAME = 'Flats'
+CHUNKSIZE = 50
 
 
 def create_service():
@@ -28,20 +29,18 @@ def create_service():
 
 
 def send_email(service, ads):
-    body = "Nouvelles annonces:\n\n"
-    for source, reference, url in ads:
-        body += "[%s] %s %s\n" % (source, reference, url)
+    for c in range(0, len(ads), CHUNKSIZE):
+        body = "Nouvelles annonces:<br/><br/>"
+        for source, reference, url in ads[c:c + CHUNKSIZE]:
+            body += "[%s] <a href='%s'>%s</a><br/>" % (source, url, reference)
 
-    message = MIMEText(body)
-    message['to'] = smtp.get_smtp_mail()
-    message['from'] = smtp.get_smtp_mail()
-    message['subject'] = u"[FLATS] Dernières annonces"
-    message = {'raw': base64.urlsafe_b64encode(message.as_string())}
+        message = MIMEText(body, 'html')
+        message['to'] = smtp.get_smtp_mail()
+        message['from'] = smtp.get_smtp_mail()
+        message['subject'] = u"[FLATS] Dernières annonces"
+        message = {'raw': base64.urlsafe_b64encode(message.as_string())}
 
-    try:
-        message = (service.users().messages().send(userId=smtp.get_smtp_mail(), body=message)
-                   .execute())
-        print 'Message Id: %s' % message['id']
-        return message
-    except errors.HttpError, error:
-        print 'An error occurred: %s' % error
+        try:
+            service.users().messages().send(userId=smtp.get_smtp_mail(), body=message).execute()
+        except errors.HttpError, error:
+            print 'An error occurred: %s' % error

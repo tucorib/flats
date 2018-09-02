@@ -10,7 +10,7 @@ from flat.sources import RestSource
 
 class Foncia(RestSource):
 
-    def __init__(self, name):
+    def __init__(self, name, *args, **kargs):
         super(Foncia, self).__init__(name)
 
         self.locations = get_source_options(self.name).get('locations', None)

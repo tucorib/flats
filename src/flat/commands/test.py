@@ -7,7 +7,7 @@ import argparse
 import sys
 
 from flat.configuration.sources import get_sources
-from flat.sources import build_source
+from flat.sources import build_source, build_browser
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -20,17 +20,20 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    for source in args.sources:
-        parser = build_source(source)
-        try:
+    browser = build_browser()
+    try:
+        for source in args.sources:
+            parser = build_source(source, browser=browser)
             parser.open()
             for reference, url in parser.parse():
                 print '[%s] %s %s' % (
                     source,
                     reference,
                     url)
-        except Exception, e:
-            print e
-        finally:
             parser.close()
+    except Exception, e:
+        print e
+    finally:
+        if browser:
+            browser.close()
     sys.exit(0)

@@ -13,7 +13,7 @@ REFERENCE_REGEX = r'Ref : (.*)$'
 
 class ClaudeSanchez(RestSource):
 
-    def __init__(self, name):
+    def __init__(self, name, *args, **kargs):
         super(ClaudeSanchez, self).__init__(name)
 
     def get_annonces(self):
