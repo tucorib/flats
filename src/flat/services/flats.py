@@ -3,7 +3,14 @@ Created on 1 sept. 2018
 
 @author: tuco
 '''
+import logging
+import logging.config
+
+from flat.configuration.logging import get_logging_conf
 from flat.services import open_db_connection
+
+logging.config.fileConfig(get_logging_conf())
+logger = logging.getLogger('root')
 
 
 def register_flats(source, flats):
@@ -20,4 +27,5 @@ def register_flats(source, flats):
         if cur.rowcount == 1:
             yield (source, reference, url)
     conn.commit()
+    logger.debug('[%s] %d ad(s) stored' % (source, len(flats)))
     conn.close()
