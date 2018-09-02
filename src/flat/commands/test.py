@@ -4,16 +4,11 @@ Created on 31 aout 2018
 @author: tuco
 '''
 import argparse
-import logging
-import logging.config
 import sys
 
-from flat.configuration.logging import get_logging_conf
 from flat.configuration.sources import get_sources
+from flat.services.logger import logger
 from flat.sources import build_source, build_browser
-
-logging.config.fileConfig(get_logging_conf())
-logger = logging.getLogger('root')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()

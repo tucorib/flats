@@ -6,13 +6,13 @@ Created on 1 sept. 2018
 '''
 from email.mime.text import MIMEText
 import base64
-
 from googleapiclient import errors
 from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file, client, tools
 
 from flat.configuration import smtp
+from flat.services.logger import logger
 
 SCOPES = 'https://www.googleapis.com/auth/gmail.send'
 APPLICATION_NAME = 'Flats'
@@ -30,17 +30,18 @@ def create_service():
 
 def send_email(service, ads):
     for c in range(0, len(ads), CHUNKSIZE):
-        body = "Nouvelles annonces:<br/><br/>"
-        for source, reference, url in ads[c:c + CHUNKSIZE]:
-            body += "[%s] <a href='%s'>%s</a><br/>" % (source, url, reference)
+        if len(ads) > c:
+            body = "Nouvelles annonces:<br/><br/>"
+            for source, reference, url in ads[c:c + CHUNKSIZE]:
+                body += "[%s] <a href='%s'>%s</a><br/>" % (source, url, reference)
 
-        message = MIMEText(body, 'html')
-        message['to'] = smtp.get_smtp_mail()
-        message['from'] = smtp.get_smtp_mail()
-        message['subject'] = u"[FLATS] Dernières annonces"
-        message = {'raw': base64.urlsafe_b64encode(message.as_string())}
+            message = MIMEText(body, 'html')
+            message['to'] = smtp.get_smtp_mail()
+            message['from'] = smtp.get_smtp_mail()
+            message['subject'] = u"[FLATS] Dernières annonces"
+            message = {'raw': base64.urlsafe_b64encode(message.as_string())}
 
-        try:
-            service.users().messages().send(userId=smtp.get_smtp_mail(), body=message).execute()
-        except errors.HttpError, error:
-            print 'An error occurred: %s' % error
+            try:
+                service.users().messages().send(userId=smtp.get_smtp_mail(), body=message).execute()
+            except errors.HttpError, error:
+                logger.error(error)
