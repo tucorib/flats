@@ -30,7 +30,7 @@ class Citya(JsRestSource):
                 if reference_search:
                     yield (
                         reference_search.group(1),
-                        _.find('a').get('href')
+                        '%s%s' % (self.domain, _.find('a').get('href'))
                     )
 
     def has_next_page(self):
