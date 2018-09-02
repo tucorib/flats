@@ -32,17 +32,17 @@ class SquareHabitat(JsRestSource):
 
         # Type annonce
         if self.typeAnnonce:
-            self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").find_elements_by_tag_name('button')[0].send_keys(Keys.END)
+            self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").click()
             for a in self.browser.find_element_by_id("cphTop_lstTypeAnnonce-mask").find_elements_by_tag_name('a'):
                 if a.text == self.typeAnnonce:
-                    a.send_keys(Keys.END)
+                    self.browser.execute_script("arguments[0].click();", a)  # a.click()
                     break
         # Type bien
         if self.typeBien:
-            self.browser.find_element_by_id("cphTop_lstTypeBien-mask").find_elements_by_tag_name('button')[0].send_keys(Keys.END)
+            self.browser.find_element_by_id("cphTop_lstTypeBien-mask").click()
             for a in self.browser.find_element_by_id("cphTop_lstTypeBien-mask").find_elements_by_tag_name('a'):
                 if a.text == self.typeBien:
-                    a.send_keys(Keys.END)
+                    self.browser.execute_script("arguments[0].click();", a)  # a.click()
                     break
         # Location
         if self.location:
