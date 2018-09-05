@@ -6,7 +6,7 @@ Created on 31 aout 2018
 import sys
 
 from flat.configuration.sources import get_sources
-from flat.services.flats import register_flats
+from flat.services.flats import register_flat
 from flat.services.logger import logger
 from flat.services.smtp import create_service, send_email
 from flat.sources import build_source, build_browser
@@ -19,7 +19,8 @@ if __name__ == '__main__':
             try:
                 parser = build_source(source, browser=browser)
                 parser.open()
-                ads += register_flats(source, parser.parse())
+                for reference, url in parser.parse():
+                    ads.append(register_flat(source, reference, url))
             except Exception, error:
                 logger.error('[%s] %s' % (source, error))
             finally:
