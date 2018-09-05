@@ -20,7 +20,9 @@ if __name__ == '__main__':
                 parser = build_source(source, browser=browser)
                 parser.open()
                 for reference, url in parser.parse():
-                    ads.append(register_flat(source, reference, url))
+                    ad = register_flat(source, reference, url)
+                    if ad:
+                        ads.append(ad)
             except Exception, error:
                 logger.error('[%s] %s' % (source, error))
             finally:

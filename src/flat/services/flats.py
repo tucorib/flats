@@ -9,6 +9,7 @@ from flat.services.logger import logger
 
 
 def register_flat(source, reference, url):
+    ad = None
     conn = open_db_connection()
     cur = conn.cursor()
     ad_count = 0
@@ -21,7 +22,8 @@ def register_flat(source, reference, url):
     )
     if cur.rowcount == 1:
         ad_count += 1
-        yield (source, reference, url)
+        ad = (source, reference, url)
     conn.commit()
     logger.debug('[%s] %d ad(s) stored' % (source, ad_count))
     conn.close()
+    return ad
